@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2036
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThreadNuclyo", "ThreadNuclyo\ThreadNuclyo.csproj", "{BDDDF698-2CAA-482E-AF6F-3F9EE2628412}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BDDDF698-2CAA-482E-AF6F-3F9EE2628412}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDDDF698-2CAA-482E-AF6F-3F9EE2628412}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDDDF698-2CAA-482E-AF6F-3F9EE2628412}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDDDF698-2CAA-482E-AF6F-3F9EE2628412}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3FD69B82-2877-47ED-854E-629D9FC04534}
+	EndGlobalSection
+EndGlobal
