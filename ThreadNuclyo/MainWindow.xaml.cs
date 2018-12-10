@@ -247,13 +247,24 @@ namespace ThreadNuclyo
                                             if(_response == true)
                                             {
                                                 var _reading = modbusReader.ReadHoldingregister(Convert.ToString(_deviceID), Convert.ToString(_startAddress), Convert.ToString(_qty));//("1", "3204", "5");
+                                               
                                                 if (_reading != null && _reading.Length > 0)
                                                 {
-                                                    for (int i = 0; (i <= (_qty - 1)); i++)
-                                                    {
-                                                       //_txtSocietyID = ((_reading[i] + "  "));
-                                                        WriteToLog(Convert.ToString(_reading[i]));
-                                                    }
+
+                                                    var id = _reading[0];//4655;
+                                                    var hexid = $"{id:X}";
+                                                    var id1 = _reading[1];//31213;
+                                                    var hexid1 = $"{id1:X}";
+                                                    var resulthex = hexid + hexid1;
+                                                    int value = Convert.ToInt32(resulthex, 16);
+
+                                                    WriteToLog(Convert.ToString(value));
+
+                                                    //for (int i = 0; (i <= (_qty - 1)); i++)
+                                                    //{
+                                                    //   //_txtSocietyID = ((_reading[i] + "  "));
+                                                    //    WriteToLog(Convert.ToString(_reading[i]));
+                                                    //}
                                                 }
                                             }
                                           
@@ -318,7 +329,34 @@ namespace ThreadNuclyo
 
         }
 
-        public static byte[] GetMSB(int[] intValue)
+        public static int GetMSB(int[] intValue)
+        {
+            try
+            {
+                if (intValue != null && intValue.Length > 0)
+                {
+                    var id = intValue[3];//4655;
+                    var hexid = $"{id:X}";
+                    var id1 = intValue[4];//31213;
+                    var hexid1 = $"{id1:X}";
+                    var resulthex = hexid + hexid1;
+                    int value = Convert.ToInt32(resulthex, 16);//Convert the Hex value to Integer(MSB)
+                    return value;
+                }
+                else
+                {
+                    return 0;
+                }
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
+
+        public static byte[] GetMSBs(int[] intValue)
         {
 
             byte[] baArray1 = new byte[2];

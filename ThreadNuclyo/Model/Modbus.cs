@@ -16,5 +16,6 @@ namespace ThreadNuclyo.Model
         public string DEAddress { get; set; }
         public int DEQuantity { get; set; }
         public string DEDatatype { get; set; }
+
     }
 }
