@@ -142,7 +142,7 @@ namespace ThreadNuclyo
                                             }
                                             else
                                             {
-                                                readDataClient.WriteDLMXDetails(_soceityID, _houseID, _meterID, _ipAddress, Convert.ToString(_port), null, null, 0);
+                                                readDataClient.WriteDLMXDetails(_soceityID, _houseID, _meterID, _ipAddress, Convert.ToString(_port), null, null, 0);//asdsadfg
                                             }
                                         }
                                     }
