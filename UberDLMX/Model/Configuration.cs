@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ThreadNuclyo.Model
+namespace UberDLMX.Model
 {
-    class DLMX
+    class Configuration
     {
         public string Manufacturer { get; set; }
         public string ClientAdd { get; set; }
@@ -18,7 +18,8 @@ namespace ThreadNuclyo.Model
         public string Model { get; set; }
         public int ImportExport { get; set; }
 
-        public int SerialNo { get; set; }
+        public string IpAddress { get; set; }
+        public int Port { get; set; }
 
         //"Manufacturer": "HPL TEST ANBU Export(Reading)",
         //"ClientAdd":"32", 

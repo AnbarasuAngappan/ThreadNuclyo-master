@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ThreadNuclyo.Model;
+using UberDLMX;
 
 namespace ThreadNuclyo
 {
@@ -24,7 +25,7 @@ namespace ThreadNuclyo
     public partial class MainWindow : Window
     {
         static private string logFile = "E:\\Log\\meterreader.log";// Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + @"\meterreader.log";
-        static private UberDLMX.DLMX dLMX = new UberDLMX.DLMX();
+        //static private UberDLMX.DLMX dLMX = new UberDLMX.DLMX();
 
         static private System.Threading.Thread syncDLMXThread = new System.Threading.Thread(DLMXsync);
         static private System.Threading.Thread syncSolarThread = new System.Threading.Thread(SolarSync);
@@ -41,6 +42,10 @@ namespace ThreadNuclyo
         static private string _txtAPIKey = null;
         static private string _txtSocietyID = null;
         static private ModBus modbusReader = null;
+        static private string _stats = null;
+
+        static private Reader reader = null;
+
 
         public MainWindow()
         {
@@ -52,13 +57,17 @@ namespace ThreadNuclyo
 
         static private void DLMXsync()
         {
+            string[] value = new string[2];
             var readDataClient = new ReadingServiceReference.UberServiceClient("BasicHttpBinding_IUberService");
+
             do
             {
                 try
                 {
-                    _apiKey = _txtAPIKey.ToString(); //System.Configuration.ConfigurationManager.AppSettings["APIKey"];
-                    _societyIDKey = _txtSocietyID.ToString(); //System.Configuration.ConfigurationManager.AppSettings["SocietyKey"];
+                    //_apiKey = _txtAPIKey.ToString(); //System.Configuration.ConfigurationManager.AppSettings["APIKey"];
+                    //_societyIDKey = _txtSocietyID.ToString(); //System.Configuration.ConfigurationManager.AppSettings["SocietyKey"];
+                    _apiKey = "35e63cb9-d1b8-49cd-b5c1-39212d33377t";//System.Configuration.ConfigurationManager.AppSettings["APIKey"];
+                    _societyIDKey = "02c7f630-3cca-479f-b36d-7a58807ecc4c";//"8c634931-122a-4318-b5f7-f63a0d3135b3";//System.Configuration.ConfigurationManager.AppSettings["SocietyKey"];
 
                     if (_apiKey != null && _apiKey.Length > 0 && _societyIDKey != null && _societyIDKey.Length > 0)
                     {
@@ -75,7 +84,7 @@ namespace ThreadNuclyo
                                 readDataClient = new ReadingServiceReference.UberServiceClient("BasicHttpBinding_IUberService");
                                 WriteToLog(DateTime.Now + "New Object Initialized For GetHouseDetails");
                             }
-                            objHouseDetailsdataTable = readDataClient.GetHouseDetails(_societyIDKey, _apiKey);
+                            objHouseDetailsdataTable = readDataClient.GetDMLSDetails(_societyIDKey, _apiKey);
 
                             if (objHouseDetailsdataTable != null && objHouseDetailsdataTable.Rows.Count > 0)
                             {
@@ -117,22 +126,121 @@ namespace ThreadNuclyo
                                             var manufacture = itemdLMX.Manufacturer;
                                             var model = itemdLMX.Model;
                                             var importExport = Convert.ToInt16(itemdLMX.ImportExport);
-                                            string[] val = dLMX.DLMXRead(_ipAddress, _port, importExport);
-                                            if (val != null && val.Length > 0)
+                                            var cientAddress = itemdLMX.ClientAdd;
+                                            var _name = itemdLMX.Name;
+                                            var _authentication = itemdLMX.Authentication;
+                                            var _password = itemdLMX.Password;
+                                            var _SObisValue = itemdLMX.SObisValue;
+                                            var _RObisValue = itemdLMX.RObisValue;
+                                            var _serialNoConfig = itemdLMX.SerialNo;
+                                            if (reader == null)
+                                            {
+                                                reader = new Reader();
+                                            }
+                                            try
+                                            {
+                                                reader = new Reader(_ipAddress, _port, cientAddress, _name, _authentication, _password, _SObisValue, _RObisValue);// 
+                                                value = reader.DLMSImport();
+                                            }
+                                            catch (Exception _exception)
+                                            {
+                                                if (_exception.InnerException != null)
+
+                                                    WriteToLog(_exception.InnerException.ToString());
+                                                else
+                                                    WriteToLog(_exception.InnerException.ToString());
+                                                #region
+                                                //reader = new Reader(_ipAddress, _port, cientAddress, _name, _authentication, _password, _SObisValue, _RObisValue);
+                                                //value = reader.Read();
+
+                                                //else
+                                                //{
+                                                //    try
+                                                //    {
+                                                //        WriteToLog(_exception.Message.ToString());
+                                                //        reader = new Reader(_ipAddress, _port, cientAddress, _name, _authentication, _password, _SObisValue, _RObisValue);
+                                                //        value = reader.Read();
+                                                //    }
+                                                //    catch (Exception _exceptions)
+                                                //    {
+                                                //        if (_exception.Message != null)
+                                                //            WriteToLog(_exception.Message.ToString());
+                                                //        else
+                                                //            WriteToLog(_exceptions.InnerException.ToString());
+                                                //        DataTable objLatestMeterreadingdataTable = new DataTable();
+                                                //        objLatestMeterreadingdataTable = readDataClient.GetLatestMeterreading(_soceityID, _ipAddress, importExport);
+                                                //        if (objLatestMeterreadingdataTable.Rows.Count > 0)
+                                                //        {
+                                                //            DataRow _datarowLatestMeterreading = objLatestMeterreadingdataTable.Rows[0];
+                                                //            var _readings = _datarowLatestMeterreading.Field<double>("Reading");
+                                                //            var _serialNo = _datarowLatestMeterreading.Field<Int64>("SerialNo");
+                                                //            readDataClient.WriteDLMXDetails(_soceityID, _houseNo, _meterID, _ipAddress, Convert.ToString(_port), Convert.ToString(_serialNo), Convert.ToString(_readings), importExport);
+                                                //            _stats = "FAULT";
+                                                //            value[2] = "1";
+                                                //            value[3] = "IP not reachable";
+                                                //            readDataClient.WriteErrorLog(_soceityID, _houseID, _meterID, _ipAddress, Convert.ToString(_port), _stats, value[2], value[3], DateTime.Now);
+                                                //        }
+                                                //    }
+
+                                                //}
+                                                #endregion
+                                            }
+
+                                            if (value != null && value.Length > 0)
                                             {
                                                 try
                                                 {
+
                                                     if (readDataClient == null)
                                                     {
                                                         readDataClient = new ReadingServiceReference.UberServiceClient("BasicHttpBinding_IUberService");
                                                         WriteToLog(DateTime.Now + "New Object Initialized");
                                                     }
+                                                    //value[0]->Serial Number
+                                                    //value[1]->reading
+                                                    //readDataClient.WriteDLMXDetails(_soceityID, _houseNo, _meterID, _ipAddress, Convert.ToString(_port), value[0], value[1], importExport);
 
-                                                    readDataClient.WriteDLMXDetails(_soceityID, _houseNo, _meterID, _ipAddress, Convert.ToString(_port), val[0], val[1], importExport);
-
-                                                    if (val[2] == "1" || val[2] == "2" || val[2] == "0")
+                                                    if (value[2] == "0" || value[2] == "1" || value[2] == "2")
                                                     {
-                                                        readDataClient.WriteErrorLog(_soceityID, _houseID, _meterID, _ipAddress, Convert.ToString(_port), "FAULT", val[2], val[3], DateTime.Now);
+                                                        if (value[2] == "1" || value[2] == "2")
+                                                        {
+                                                            DataTable objLatestMeterreadingdataTable = new DataTable();
+                                                            objLatestMeterreadingdataTable = readDataClient.GetLatestMeterreading(_soceityID, _ipAddress, importExport);
+                                                            if (objLatestMeterreadingdataTable.Rows.Count > 0)
+                                                            {
+                                                                DataRow _datarowLatestMeterreading = objLatestMeterreadingdataTable.Rows[0];
+                                                                var _readings = _datarowLatestMeterreading.Field<double>("Reading");
+                                                                var _serialNo = _datarowLatestMeterreading.Field<Int64>("SerialNo");
+                                                                readDataClient.WriteDLMXDetails(_soceityID, _houseNo, _meterID, _ipAddress, Convert.ToString(_port), Convert.ToString(_serialNo), Convert.ToString(_readings), importExport);
+                                                                _stats = "FAULT";
+                                                            }
+
+                                                        }
+                                                        else
+                                                        {
+                                                            if (_serialNoConfig.ToString() == value[0].ToString())
+                                                            {
+                                                                readDataClient.WriteDLMXDetails(_soceityID, _houseNo, _meterID, _ipAddress, Convert.ToString(_port), value[0], value[1], importExport);
+                                                                _stats = "SUCCESS";
+                                                            }
+                                                            else
+                                                            {
+                                                                DataTable objLatestMeterreadingdataTable = new DataTable();
+                                                                objLatestMeterreadingdataTable = readDataClient.GetLatestMeterreading(_soceityID, _ipAddress, importExport);
+                                                                if (objLatestMeterreadingdataTable.Rows.Count > 0)
+                                                                {
+                                                                    DataRow _datarowLatestMeterreading = objLatestMeterreadingdataTable.Rows[0];
+                                                                    var _readings = _datarowLatestMeterreading.Field<double>("Reading");
+                                                                    var _serialNo = _datarowLatestMeterreading.Field<Int64>("SerialNo");
+                                                                    readDataClient.WriteDLMXDetails(_soceityID, _houseNo, _meterID, _ipAddress, Convert.ToString(_port), Convert.ToString(_serialNo), Convert.ToString(_readings), importExport);
+                                                                    _stats = "FAULT";
+                                                                    value[2] = "3";
+                                                                    value[3] = "Serial No Mismatch";
+                                                                }
+                                                            }
+
+                                                        }
+                                                        readDataClient.WriteErrorLog(_soceityID, _houseID, _meterID, _ipAddress, Convert.ToString(_port), _stats, value[2], value[3], DateTime.Now);
                                                     }
                                                 }
                                                 catch (Exception e)
@@ -192,16 +300,12 @@ namespace ThreadNuclyo
         static private void SolarSync()
         {
             var readDataClient = new ReadingServiceReference.UberServiceClient("BasicHttpBinding_IUberService");
-            if(modbusReader == null)
-            {
-                modbusReader = new ModBus();
-            }
             do
             {
                 try
                 {
-                    _apiKey = "35e63cb9-d1b8-49cd-b5c1-39212d33376g";//System.Configuration.ConfigurationManager.AppSettings["APIKey"];
-                    _societyIDKey = "8c634931-122a-4318-b5f7-f63a0d3135b3";//System.Configuration.ConfigurationManager.AppSettings["SocietyKey"];
+                    _apiKey = "35e63cb9-d1b8-49cd-b5c1-39212d33377t";//System.Configuration.ConfigurationManager.AppSettings["APIKey"];
+                    _societyIDKey = "02c7f630-3cca-479f-b36d-7a58807ecc4c";//"8c634931-122a-4318-b5f7-f63a0d3135b3";//System.Configuration.ConfigurationManager.AppSettings["SocietyKey"];
 
                     if (_apiKey != null && _apiKey.Length > 0 && _societyIDKey != null && _societyIDKey.Length > 0)
                     {
@@ -225,11 +329,11 @@ namespace ThreadNuclyo
                                 foreach (DataRow datarowItem in objHouseDetailsdataTable.Rows)
                                 {
                                     var _soceityID = datarowItem.Field<string>("SiD");
-                                    var _houseID = datarowItem.Field<string>("HiD");
-                                    var _houseNo = datarowItem.Field<string>("House No");
-                                    var _meterID = datarowItem.Field<string>("MiD");
+                                    //var _houseID = datarowItem.Field<string>("HiD");
+                                    var _siteName = datarowItem.Field<string>("Site Name");//House No
+                                    var _meterID = datarowItem.Field<string>("SMiD");
                                     var _meterType = Convert.ToInt16(datarowItem.Field<Int16>("PiD"));
-                                    var _meterSettings = datarowItem.Field<string>("metersetting");
+                                    var _meterSettings = datarowItem.Field<string>("MeterSetting");
                                     var _ipAddress = datarowItem.Field<string>("IPAddress");
                                     var _port = Convert.ToInt32(datarowItem.Field<string>("Port"));
                                     if (_meterType == 3)
@@ -241,33 +345,51 @@ namespace ThreadNuclyo
                                             var _startAddress = Convert.ToInt32(itembus.DEAddress);
                                             var _qty = itembus.DEQuantity;
                                             var _deviceID = itembus.DeviceID;
-                                            //int[] readHoldingRegisters = ModbusReading.ReadRegisterWithDeviceIDs(_ipAddress, _port, _startAddress, _regType, _qty, _deviceID);
-                                            //var byteresult = GetMSB(readHoldingRegisters);
-                                            bool _response = modbusReader.OpenProtocol(_ipAddress, _port);
-                                            if(_response == true)
+                                            var _protocalType = itembus.ProtocolType;
+                                            if (modbusReader == null)
+                                            {
+                                                modbusReader = new ModBus();
+                                            }
+                                            bool _response = modbusReader.OpenProtocol(_ipAddress, _port, _protocalType);
+                                            if (_response == true)
                                             {
                                                 var _reading = modbusReader.ReadHoldingregister(Convert.ToString(_deviceID), Convert.ToString(_startAddress), Convert.ToString(_qty));//("1", "3204", "5");
-                                               
                                                 if (_reading != null && _reading.Length > 0)
                                                 {
+                                                    try
+                                                    {
+                                                        var id = _reading[0];//4655;
+                                                        var hexid = $"{id:X}";
+                                                        var id1 = _reading[1];//31213;
+                                                        var hexid1 = $"{id1:X}";
+                                                        var resulthex = hexid + hexid1;
+                                                        int value = Convert.ToInt32(resulthex, 16);
 
-                                                    var id = _reading[0];//4655;
-                                                    var hexid = $"{id:X}";
-                                                    var id1 = _reading[1];//31213;
-                                                    var hexid1 = $"{id1:X}";
-                                                    var resulthex = hexid + hexid1;
-                                                    int value = Convert.ToInt32(resulthex, 16);
-
-                                                    WriteToLog(Convert.ToString(value));
-
-                                                    //for (int i = 0; (i <= (_qty - 1)); i++)
-                                                    //{
-                                                    //   //_txtSocietyID = ((_reading[i] + "  "));
-                                                    //    WriteToLog(Convert.ToString(_reading[i]));
-                                                    //}
+                                                        if (readDataClient == null)
+                                                        {
+                                                            readDataClient = new ReadingServiceReference.UberServiceClient("BasicHttpBinding_IUberService");
+                                                            WriteToLog(DateTime.Now + "New Object Initialized");
+                                                        }
+                                                        readDataClient.WriteSolarDetails(_soceityID, _siteName, _meterID, _ipAddress, Convert.ToString(_port), "0.00", Convert.ToString(value), 3);
+                                                        _stats = "SUCCESS";
+                                                        readDataClient.WriteModbusErrorLog(_soceityID, _meterID, _ipAddress, Convert.ToString(_port), _stats, "0", "Success", DateTime.Now);
+                                                    }
+                                                    catch (Exception e)
+                                                    {
+                                                        WriteToLog(DateTime.Now + e.InnerException.ToString());
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    _stats = "FAULT";
+                                                    readDataClient.WriteModbusErrorLog(_soceityID, _meterID, _ipAddress, Convert.ToString(_port), _stats, "2", "Meter not reachable", DateTime.Now);
                                                 }
                                             }
-                                          
+                                            else
+                                            {
+                                                _stats = "FAULT";
+                                                readDataClient.WriteModbusErrorLog(_soceityID, _meterID, _ipAddress, Convert.ToString(_port), _stats, "1", "IP not reachable", DateTime.Now);
+                                            }
                                         }
                                     }
                                 }
@@ -408,7 +530,7 @@ namespace ThreadNuclyo
         {
             try
             {
-                if(chkboxDLMX.IsChecked == true)
+                if (chkboxDLMX.IsChecked == true)
                 {
                     syncDLMXThread.Abort();
                 }

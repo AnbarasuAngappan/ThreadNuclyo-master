@@ -62,7 +62,7 @@
     </Reference>
     <Reference Include="UberDLMX, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>DLL\UberDLMX.dll</HintPath>
+      <HintPath>..\UberDLMX\bin\Debug\UberDLMX.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
@@ -135,6 +135,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="GuruXDLL\Gurux.Common.dll" />
+    <Content Include="GuruXDLL\Gurux.DLMS.dll" />
+    <Content Include="GuruXDLL\Gurux.Net.dll" />
+    <Content Include="GuruXDLL\Gurux.Serial.dll" />
+    <Content Include="GuruXDLL\UberDLMX.dll" />
     <None Include="Connected Services\ReadingServiceReference\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>

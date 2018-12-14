@@ -80,6 +80,18 @@
   <wsdl:message name="IUberService_WriteSolarDetails_OutputMessage">
     <wsdl:part name="parameters" element="tns:WriteSolarDetailsResponse" />
   </wsdl:message>
+  <wsdl:message name="IUberService_WriteModbusErrorLog_InputMessage">
+    <wsdl:part name="parameters" element="tns:WriteModbusErrorLog" />
+  </wsdl:message>
+  <wsdl:message name="IUberService_WriteModbusErrorLog_OutputMessage">
+    <wsdl:part name="parameters" element="tns:WriteModbusErrorLogResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUberService_GetDMLSDetails_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetDMLSDetails" />
+  </wsdl:message>
+  <wsdl:message name="IUberService_GetDMLSDetails_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetDMLSDetailsResponse" />
+  </wsdl:message>
   <wsdl:portType name="IUberService">
     <wsdl:operation name="GetHouseDetails">
       <wsdl:input wsaw:Action="http://tempuri.org/IUberService/GetHouseDetails" message="tns:IUberService_GetHouseDetails_InputMessage" />
@@ -112,6 +124,14 @@
     <wsdl:operation name="WriteSolarDetails">
       <wsdl:input wsaw:Action="http://tempuri.org/IUberService/WriteSolarDetails" message="tns:IUberService_WriteSolarDetails_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IUberService/WriteSolarDetailsResponse" message="tns:IUberService_WriteSolarDetails_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="WriteModbusErrorLog">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUberService/WriteModbusErrorLog" message="tns:IUberService_WriteModbusErrorLog_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUberService/WriteModbusErrorLogResponse" message="tns:IUberService_WriteModbusErrorLog_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDMLSDetails">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUberService/GetDMLSDetails" message="tns:IUberService_GetDMLSDetails_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUberService/GetDMLSDetailsResponse" message="tns:IUberService_GetDMLSDetails_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IUberService" type="tns:IUberService">
@@ -182,6 +202,24 @@
     </wsdl:operation>
     <wsdl:operation name="WriteSolarDetails">
       <soap:operation soapAction="http://tempuri.org/IUberService/WriteSolarDetails" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WriteModbusErrorLog">
+      <soap:operation soapAction="http://tempuri.org/IUberService/WriteModbusErrorLog" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDMLSDetails">
+      <soap:operation soapAction="http://tempuri.org/IUberService/GetDMLSDetails" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>

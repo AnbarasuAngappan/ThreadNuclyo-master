@@ -62,6 +62,18 @@ namespace ThreadNuclyo.ReadingServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUberService/WriteSolarDetails", ReplyAction="http://tempuri.org/IUberService/WriteSolarDetailsResponse")]
         System.Threading.Tasks.Task WriteSolarDetailsAsync(string _societyIS, string _houseID, string _meterID, string _ipAddress, string _port, string _serialNo, string _reading, int _importExport);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUberService/WriteModbusErrorLog", ReplyAction="http://tempuri.org/IUberService/WriteModbusErrorLogResponse")]
+        void WriteModbusErrorLog(string _societyID, string _meterID, string _ipAddress, string _port, string _status, string _errorCode, string _errorMsg, System.DateTime _dateTime);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUberService/WriteModbusErrorLog", ReplyAction="http://tempuri.org/IUberService/WriteModbusErrorLogResponse")]
+        System.Threading.Tasks.Task WriteModbusErrorLogAsync(string _societyID, string _meterID, string _ipAddress, string _port, string _status, string _errorCode, string _errorMsg, System.DateTime _dateTime);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUberService/GetDMLSDetails", ReplyAction="http://tempuri.org/IUberService/GetDMLSDetailsResponse")]
+        System.Data.DataTable GetDMLSDetails(string _houseID, string _apiKey);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUberService/GetDMLSDetails", ReplyAction="http://tempuri.org/IUberService/GetDMLSDetailsResponse")]
+        System.Threading.Tasks.Task<System.Data.DataTable> GetDMLSDetailsAsync(string _houseID, string _apiKey);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -153,6 +165,22 @@ namespace ThreadNuclyo.ReadingServiceReference {
         
         public System.Threading.Tasks.Task WriteSolarDetailsAsync(string _societyIS, string _houseID, string _meterID, string _ipAddress, string _port, string _serialNo, string _reading, int _importExport) {
             return base.Channel.WriteSolarDetailsAsync(_societyIS, _houseID, _meterID, _ipAddress, _port, _serialNo, _reading, _importExport);
+        }
+        
+        public void WriteModbusErrorLog(string _societyID, string _meterID, string _ipAddress, string _port, string _status, string _errorCode, string _errorMsg, System.DateTime _dateTime) {
+            base.Channel.WriteModbusErrorLog(_societyID, _meterID, _ipAddress, _port, _status, _errorCode, _errorMsg, _dateTime);
+        }
+        
+        public System.Threading.Tasks.Task WriteModbusErrorLogAsync(string _societyID, string _meterID, string _ipAddress, string _port, string _status, string _errorCode, string _errorMsg, System.DateTime _dateTime) {
+            return base.Channel.WriteModbusErrorLogAsync(_societyID, _meterID, _ipAddress, _port, _status, _errorCode, _errorMsg, _dateTime);
+        }
+        
+        public System.Data.DataTable GetDMLSDetails(string _houseID, string _apiKey) {
+            return base.Channel.GetDMLSDetails(_houseID, _apiKey);
+        }
+        
+        public System.Threading.Tasks.Task<System.Data.DataTable> GetDMLSDetailsAsync(string _houseID, string _apiKey) {
+            return base.Channel.GetDMLSDetailsAsync(_houseID, _apiKey);
         }
     }
 }
